@@ -1,0 +1,5 @@
+After logout, we have to delete the userdata from redis. To do that, we have to create a middleware to check authentication
+
+=> @types folder have global declaration of variables
+
+=> Redis works as a cache by storing frequently accessed data in its fast in-memory storage. Applications check if needed data is in the cache by using unique keys. If the data is found, it's quickly returned (cache hit); otherwise, the application retrieves the data from the primary source and stores it in Redis for future use (cache miss). Redis supports features like expiration times, cache invalidation, and clustering for scalability, making it a powerful and popular caching solution.

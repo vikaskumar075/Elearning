@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Circles and Arrows</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+
+        .header{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn{
+            margin-top: 30px;
+        }
+        .btn button{
+            padding:10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bubble App</h1>
+            <canvas id="myCanvas" width="500px"></canvas>
+            <div class="btn">
+                <button id="resetButton">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const canvas = document.getElementById("myCanvas");
+            const ctx = canvas.getContext("2d");
+
+            // Define circle properties
+            const circleRadius = 30;
+            const circleColors = ["red", "green", "blue", "yellow"];
+
+            // Circle positions
+            const circleX = canvas.width / 6;
+            const circleMargin = 10; // Margin between circles
+            const circles = [];
+            for (let i = 0; i < circleColors.length; i++) {
+                const circleY = 50 + i * (circleRadius * 2 + circleMargin);
+                circles.push({ x: circleX, y: circleY, color: circleColors[i], hit: false });
+            }
+
+            // Define arrow properties
+            const arrowLength = 50;
+            const arrowSpeed = 2;
+            const arrowDuration = 1000; // Animation duration in milliseconds
+            const arrows = [];
+            const arrowY = canvas.height / 2;
+            for (let i = 0; i < circleColors.length; i++) {
+                arrows.push({ x: canvas.width - 50, y: 50 + i * (circleRadius * 2 + circleMargin), dx: 0, dy: 0, active: false, startTime: null });
+            }
+
+            // Set canvas height dynamically
+            canvas.height = circles[circles.length - 1].y + circleRadius + 20;
+
+            // Draw function to draw circles and arrows
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw circles
+                circles.forEach(circle => {
+                    ctx.beginPath();
+                    ctx.arc(circle.x, circle.y, circleRadius, 0, Math.PI * 2);
+                    ctx.fillStyle = circle.hit ? "gray" : circle.color;
+                    ctx.fill();
+                    ctx.closePath();
+                });
+
+                // Draw arrows
+                arrows.forEach(arrow => {
+                    if (arrow.active) {
+                        const progress = Date.now() - arrow.startTime;
+                        const ratio = progress / arrowDuration;
+                        if (ratio >= 1) {
+                            arrow.active = false;
+                            arrow.x = canvas.width - 50;
+                            arrow.y = 50 + (arrow.y - 50) % (circleRadius * 2 + circleMargin);
+                            return;
+                        }
+                        const x = arrow.x - (canvas.width - circleX) * ratio;
+                        ctx.beginPath();
+                        ctx.moveTo(x, arrow.y - arrowLength / 2);
+                        ctx.lineTo(x - arrowLength, arrow.y);
+                        ctx.lineTo(x, arrow.y + arrowLength / 2);
+                        ctx.fillStyle = "black";
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                });
+
+                // Request animation frame
+                requestAnimationFrame(draw);
+            }
+
+            // Function to handle click event inside a circle
+            function handleClick(x, y) {
+                circles.forEach((circle, index) => {
+                    if (Math.sqrt((x - circle.x) ** 2 + (y - circle.y) ** 2) <= circleRadius) {
+                        if (!circle.hit) {
+                            arrows[index].active = true;
+                            arrows[index].startTime = Date.now();
+                        }
+                    }
+                });
+            }
+
+            // Event listener for mouse click
+            canvas.addEventListener("click", function (event) {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+                handleClick(mouseX, mouseY);
+            });
+
+            // Event listener for reset button
+            document.getElementById("resetButton").addEventListener("click", function () {
+                arrows.forEach(arrow => {
+                    arrow.active = false;
+                    arrow.x = canvas.width - 50;
+                    arrow.y = 50 + (arrow.y - 50) % (circleRadius * 2 + circleMargin);
+                });
+                circles.forEach(circle => {
+                    circle.hit = false;
+                    circle.color = circleColors[circles.indexOf(circle)];
+                });
+            });
+
+            // Initial draw call
+            draw();
+        });
+    </script>
+</body>
+
+</html>

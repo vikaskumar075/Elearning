@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            min-width: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            background-color: #FAFAFA;
+            color: #222222
+        }
+
+        a {
+            color: #FF0000;
+            text-decoration: none;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        table td {
+            vertical-align: top;
+        }
+
+        /* Layout */
+        .email-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .email-header {
+            border-color: #0070f3;
+            padding: 24px;
+            columns: #ffffff;
+        }
+
+        .email-body {
+            padding: 24px;
+            background-color: #ffffff;
+        }
+
+        .email-footer {
+            background-color: #f6f6f6;
+            padding: 24px;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            background-color: #0070f3;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+        }
+
+        .first-td{
+            width: 100px;
+        }
+        .second-td{
+            font-weight: 600;
+            color:#3f3f3f;
+            /* padding-left: 20px; */
+        }
+    </style>
+    <title>Order Confirmation Mail</title>
+</head>
+
+<body>
+    <div class="email-wrapper">
+        <div class="email-header">
+            <h3 style="text-align: center;">Hello <%= name %>,</h3>
+            <h1>Your E-Learning order is confirmed!</h1>
+            <p style="text-align: center;">And we're just as excited as you are</p>
+        </div>
+        <!-- <br /> -->
+        <br />
+        <div class="email-body">
+            <h4>Her's what you ordered:</h4>
+            <table style="border-bottom: 1px solid #0000002f;">
+                <tr>
+                    <td class="first-td">
+                        Order Id
+                    </td>
+                    <td class="second-td">
+                        <%= order._id %>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first-td">
+                        Order Date 
+                    </td>
+                    <td class="second-td">
+                        <%= order.date %>
+                    </td>
+                </tr>
+            </table>
+            <table >
+                <tr>
+                    <td class="first-td">Item</td>
+                    <td class="second-td">
+                        <%= order.name %>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="first-td">Quantity</td>
+                    <td class="second-td">1</td>
+                </tr>
+                <tr>
+                    <td class="first-td">Cost</td>
+                    <td class="second-td">
+                        <%= order.price %>
+                    </td>
+                </tr>
+            </table>
+            <table class="table-row" style="border-top: 1px solid #00000029;">
+                <tr>
+                    <td class="first-td">Subtotal:</td>
+                    <td class="second-td">$<%= order.price %>
+                    </td>
+                </tr>
+            </table>
+            <table class="table-row">
+                <tr>
+                    <td class="first-td">Total:</td>
+                    <td class="second-td">$<%= order.price %>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="email-footer">
+            <p>If you have any questions, please don't hesitate to contact us at this <a
+                    href="mailto:gangwarsaransh79@gmail.com">mail.</a></p>
+            <p>&copy: 2024 E-Learning. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>
